@@ -105,13 +105,13 @@
             }
             else if (parsed.Contains('['))
             {
-                string mapped = string.Empty, type = parsed.Substring(0, parsed.IndexOf('['));
+                string mapped = string.Empty, type = parsed[..parsed.IndexOf('[')];
 
                 if (map.ContainsKey(type)) mapped = map[type];
                 else if (dontExist.Contains(type)) mapped = nonExist.bodyType;
                 else mapped = type;
 
-                mapped += parsed.Substring(parsed.IndexOf('['));
+                mapped += parsed[parsed.IndexOf('[')..];
                 return mapped;
             }
             else

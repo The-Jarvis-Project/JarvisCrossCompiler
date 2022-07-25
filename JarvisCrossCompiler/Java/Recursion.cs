@@ -51,9 +51,6 @@ namespace JCC.Java
                 case SyntaxKind.NewKeyword:
                     java += "new ";
                     break;
-                case SyntaxKind.IdentifierToken:
-                    java += token.Text;
-                    break;
                 default:
                     break;
             }

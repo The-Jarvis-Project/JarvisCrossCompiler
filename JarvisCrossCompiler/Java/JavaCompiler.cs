@@ -20,6 +20,7 @@ namespace JCC.Java
             classes = new List<JavaClassData>();
             enums = new List<JavaEnumData>();
             createdInstCounter = new Dictionary<string, int>();
+
             typeMap = new TypeMap(new TypeMap.NonExistProp("void", "var"),
                 ("string", "String"),
                 ("bool", "Boolean"),
@@ -244,37 +245,6 @@ namespace JCC.Java
             }
         }
 
-        /*private string BuildLeadingTrivia(SyntaxToken token)
-        {
-            string result = string.Empty;
-            if (token.HasLeadingTrivia)
-                for (int t = 0; t < token.LeadingTrivia.Count; t++)
-                    result += BuildTrivia(token.LeadingTrivia[t]);
-            return result;
-        }
-
-        private string BuildTrailingTrivia(SyntaxToken token)
-        {
-            string result = string.Empty;
-            if (token.HasTrailingTrivia)
-                for (int t = 0; t < token.TrailingTrivia.Count; t++)
-                    result += BuildTrivia(token.TrailingTrivia[t]);
-            return result;
-        }
-
-        private string BuildTrivia(SyntaxTrivia trivia)
-        {
-            string result = string.Empty;
-            if (trivia.IsKind(SyntaxKind.WhitespaceTrivia))
-            {
-                for (int l = 0; l < trivia.Span.Length / 4; l++)
-                    result += "\t";
-                for (int l = 0; l < trivia.Span.Length % 4; l++)
-                    result += " ";
-            }
-            return result;
-        }*/
-
         private void AddEnum(string className, EnumDeclarationSyntax enumSyn)
         {
             JavaEnumData enumData = new JavaEnumData
@@ -478,7 +448,6 @@ namespace JCC.Java
 
         private void ExpressionTree(SyntaxNode current, ref JavaExpressionData curData)
         {
-            ChildSyntaxList list = current.ChildNodesAndTokens();
             if (current.IsKind(SyntaxKind.ElementAccessExpression))
             {
                 ElementAccessExpressionSyntax syn = (ElementAccessExpressionSyntax)current;
@@ -702,18 +671,6 @@ namespace JCC.Java
                 }
                 else ExpressionTree(syn.Expression, ref curData);
             }
-            else if (current.IsKind(SyntaxKind.ThisExpression))
-            {
-                ThisExpressionSyntax syn = (ThisExpressionSyntax)current;
-                curData.expressionText += syn.Token.Text;
-            }
-            else if (current.IsKind(SyntaxKind.SingleVariableDesignation))
-            {
-                SingleVariableDesignationSyntax syn = (SingleVariableDesignationSyntax)current;
-                curData.expressionText += syn.Identifier.Text;
-            }
-            else if (current.IsKind(SyntaxKind.DefaultLiteralExpression))
-                curData.expressionText += "null";
             else if (current.IsKind(SyntaxKind.ArrayType))
             {
                 ArrayTypeSyntax syn = (ArrayTypeSyntax)current;
@@ -737,8 +694,32 @@ namespace JCC.Java
                     curData.expressionText += "]";
                 }
             }
+            else if (current.IsKind(SyntaxKind.ThisExpression))
+            {
+                ThisExpressionSyntax syn = (ThisExpressionSyntax)current;
+                curData.expressionText += syn.Token.Text;
+            }
+            else if (current.IsKind(SyntaxKind.SingleVariableDesignation))
+            {
+                SingleVariableDesignationSyntax syn = (SingleVariableDesignationSyntax)current;
+                curData.expressionText += syn.Identifier.Text;
+            }
+            else if (current.IsKind(SyntaxKind.IdentifierName))
+            {
+                IdentifierNameSyntax syn = (IdentifierNameSyntax)current;
+                if (syn.Identifier.Text != "_")
+                    curData.expressionText += syn.Identifier.Text;
+                else
+                {
+                    curData.expressionText += "_dummy_" + discards;
+                    discards++;
+                }
+            }
+            else if (current.IsKind(SyntaxKind.IdentifierName))
+                curData.expressionText += "null";
             else
             {
+                ChildSyntaxList list = current.ChildNodesAndTokens();
                 for (int i = 0; i < list.Count; i++)
                 {
                     if (list[i].IsNode)
@@ -753,7 +734,8 @@ namespace JCC.Java
                                 node.IsKind(SyntaxKind.Argument) ||
                                 node.IsKind(SyntaxKind.InvocationExpression) ||
                                 node.IsKind(SyntaxKind.CastExpression) ||
-                                node.IsKind(SyntaxKind.ArrayType))
+                                node.IsKind(SyntaxKind.ArrayType) ||
+                                node.IsKind(SyntaxKind.IdentifierName))
                                 ExpressionTree(node, ref curData);
                             else if (node.IsKind(SyntaxKind.SimpleAssignmentExpression))
                             {

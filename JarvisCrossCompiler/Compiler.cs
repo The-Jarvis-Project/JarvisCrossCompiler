@@ -14,6 +14,7 @@ namespace JCC
         protected readonly CSharpCompilation comp;
         protected readonly SemanticModel sModel;
         protected readonly Stopwatch stopwatch;
+        protected int discards;
 
         private static Compiler? Current { get; set; }
         public static bool UseConvention => Current != null && Current.enforceConventions;
@@ -45,6 +46,7 @@ namespace JCC
             OutputText = string.Empty;
             Debug = new List<string>();
             stopwatch = new Stopwatch();
+            discards = 0;
         }
 
         public virtual void Run()
