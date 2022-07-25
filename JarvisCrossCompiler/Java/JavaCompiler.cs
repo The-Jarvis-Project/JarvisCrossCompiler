@@ -514,6 +514,9 @@ namespace JCC.Java
                 if (syn.Name.Identifier.Text == "Empty" &&
                     ((typeExists && kind == SymbolKind.Field && containingType == "String") || !typeExists))
                     curData.expressionText += "new String()";
+                else if (syn.Name.Identifier.Text == "ToString" &&
+                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                    curData.expressionText += ".toString";
                 else if (syn.Name.Identifier.Text == "Replace" &&
                     ((typeExists && kind == SymbolKind.Method) || !typeExists))
                     curData.expressionText += ".replace";
