@@ -930,7 +930,7 @@ namespace JCC.Java
                                 JavaExpressionData? xData = ProcessExpression(syn, curData.curTabs);
                                 if (xData != null) curData.blockText += xData?.expressionText;
                             }
-                            if (node.IsKind(SyntaxKind.ArgumentList))
+                            else if (node.IsKind(SyntaxKind.ArgumentList))
                             {
                                 ArgumentListSyntax argumentList = (ArgumentListSyntax)node;
                                 for (int a = 0; a < argumentList.Arguments.Count; a++)
