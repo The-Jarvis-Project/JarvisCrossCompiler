@@ -842,7 +842,7 @@ namespace JCC.Java
                     JavaBlockData? xDataBlock = ProcessBlock(block, curData.curTabs);
                     if (xDataBlock != null) curData.blockText += xDataBlock?.blockText + newL;
                 }
-                
+
             }
             else if (current.IsKind(SyntaxKind.IfStatement))
             {
@@ -914,6 +914,14 @@ namespace JCC.Java
                     curData.blockText += "]";
                 }
             }
+            else if (current.IsKind(SyntaxKind.ReturnStatement))
+            {
+                ReturnStatementSyntax syn = (ReturnStatementSyntax)current;
+                curData.blockText += curData.TabString + "return ";
+                JavaExpressionData? xData = ProcessExpression(syn.Expression, curData.curTabs);
+                if (xData != null) curData.blockText += xData?.expressionText;
+                curData.blockText += ";" + newL;
+            }
             else if (current.IsKind(SyntaxKind.ContinueStatement))
                 curData.blockText += curData.TabString + "continue;" + newL;
             else
@@ -930,7 +938,8 @@ namespace JCC.Java
                                 node.IsKind(SyntaxKind.IfStatement) ||
                                 node.IsKind(SyntaxKind.ExpressionStatement) ||
                                 node.IsKind(SyntaxKind.ContinueStatement) ||
-                                node.IsKind(SyntaxKind.ArrayType))
+                                node.IsKind(SyntaxKind.ArrayType) ||
+                                node.IsKind(SyntaxKind.ReturnStatement))
                                 BlockTree(node, ref curData);
                             else if (node.IsKind(SyntaxKind.LessThanExpression) ||
                                 node.IsKind(SyntaxKind.PostIncrementExpression))
