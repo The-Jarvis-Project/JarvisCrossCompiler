@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JarvisCrossCompiler", "JarvisCrossCompiler\JarvisCrossCompiler.csproj", "{91ADF8DA-2092-431D-8DB8-6F49D6163111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompilerTestConsole", "CompilerTestConsole\CompilerTestConsole.csproj", "{B65E9C8D-11ED-4AE7-B033-7AC427E92A51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91ADF8DA-2092-431D-8DB8-6F49D6163111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91ADF8DA-2092-431D-8DB8-6F49D6163111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91ADF8DA-2092-431D-8DB8-6F49D6163111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91ADF8DA-2092-431D-8DB8-6F49D6163111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B65E9C8D-11ED-4AE7-B033-7AC427E92A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B65E9C8D-11ED-4AE7-B033-7AC427E92A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B65E9C8D-11ED-4AE7-B033-7AC427E92A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B65E9C8D-11ED-4AE7-B033-7AC427E92A51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8F1B3FB-CB10-4A05-85A3-9BEFBA379DFB}
+	EndGlobalSection
+EndGlobal
