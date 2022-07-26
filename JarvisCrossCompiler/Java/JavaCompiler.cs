@@ -715,7 +715,7 @@ namespace JCC.Java
                     discards++;
                 }
             }
-            else if (current.IsKind(SyntaxKind.IdentifierName))
+            else if (current.IsKind(SyntaxKind.DefaultLiteralExpression))
                 curData.expressionText += "null";
             else
             {
