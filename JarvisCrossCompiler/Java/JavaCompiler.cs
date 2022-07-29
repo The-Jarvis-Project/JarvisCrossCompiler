@@ -830,9 +830,37 @@ namespace JCC.Java
                 {
                     BlockSyntax block = (BlockSyntax)syn.Statement;
                     JavaBlockData? xDataBlock = ProcessBlock(block, curData.curTabs);
-                    if (xDataBlock != null) curData.blockText += xDataBlock?.blockText + newL;
+                    if (xDataBlock != null) curData.blockText += xDataBlock?.blockText;
                 }
+            }
+            else if (current.IsKind(SyntaxKind.ForEachStatement))
+            {
+                ForEachStatementSyntax syn = (ForEachStatementSyntax)current;
+                curData.blockText += curData.TabString + "for (";
 
+                string typeText = typeMap.Map(syn.Type.Text());
+                curData.blockText += typeText;
+                imports.AddType(typeText);
+
+                curData.blockText += " " + syn.Identifier.Text + " : ";
+
+                JavaExpressionData? xData = ProcessExpression(syn.Expression, curData.curTabs);
+                if (xData != null) curData.blockText += xData?.expressionText;
+
+                curData.blockText += ")";
+                if (!syn.Statement.IsKind(SyntaxKind.Block))
+                {
+                    curData.curTabs++;
+                    curData.blockText += newL;
+                    BlockTree(syn.Statement, ref curData);
+                    curData.curTabs--;
+                }
+                else
+                {
+                    BlockSyntax block = (BlockSyntax)syn.Statement;
+                    JavaBlockData? xDataBlock = ProcessBlock(block, curData.curTabs);
+                    if (xDataBlock != null) curData.blockText += xDataBlock?.blockText;
+                }
             }
             else if (current.IsKind(SyntaxKind.IfStatement))
             {
@@ -854,7 +882,7 @@ namespace JCC.Java
                 {
                     BlockSyntax block = (BlockSyntax)syn.Statement;
                     JavaBlockData? xDataBlock = ProcessBlock(block, curData.curTabs);
-                    if (xDataBlock != null) curData.blockText += xDataBlock?.blockText + newL;
+                    if (xDataBlock != null) curData.blockText += xDataBlock?.blockText;
                 }
 
                 if (syn.Else != null) BlockTree(syn.Else, ref curData);
@@ -900,7 +928,6 @@ namespace JCC.Java
                             curData.blockText += xData?.expressionText;
                         }
                     }
-
                     curData.blockText += "]";
                 }
             }
@@ -929,7 +956,8 @@ namespace JCC.Java
                                 node.IsKind(SyntaxKind.ExpressionStatement) ||
                                 node.IsKind(SyntaxKind.ContinueStatement) ||
                                 node.IsKind(SyntaxKind.ArrayType) ||
-                                node.IsKind(SyntaxKind.ReturnStatement))
+                                node.IsKind(SyntaxKind.ReturnStatement) ||
+                                node.IsKind(SyntaxKind.ForEachStatement))
                                 BlockTree(node, ref curData);
                             else if (node.IsKind(SyntaxKind.LessThanExpression) ||
                                 node.IsKind(SyntaxKind.PostIncrementExpression))
@@ -997,7 +1025,7 @@ namespace JCC.Java
                             token.Parent.IsKind(SyntaxKind.Block))
                         {
                             curData.curTabs--;
-                            curData.blockText += curData.TabString + "}";
+                            curData.blockText += curData.TabString + "}" + newL;
                         }
                         else if (token.IsKind(SyntaxKind.CommaToken) &&
                             token.Parent.IsKind(SyntaxKind.VariableDeclaration))
