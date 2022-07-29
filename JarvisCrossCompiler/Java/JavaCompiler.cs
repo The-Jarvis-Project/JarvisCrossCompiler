@@ -717,6 +717,12 @@ namespace JCC.Java
             }
             else if (current.IsKind(SyntaxKind.DefaultLiteralExpression))
                 curData.expressionText += "null";
+            else if (current.IsKind(SyntaxKind.GenericName))
+            {
+                string typeText = ((GenericNameSyntax)current).Text();
+                curData.expressionText += typeMap.Map(typeText);
+                imports.AddType(typeText.JavaSubTypes());
+            }
             else
             {
                 ChildSyntaxList list = current.ChildNodesAndTokens();
@@ -735,19 +741,11 @@ namespace JCC.Java
                                 node.IsKind(SyntaxKind.InvocationExpression) ||
                                 node.IsKind(SyntaxKind.CastExpression) ||
                                 node.IsKind(SyntaxKind.ArrayType) ||
-                                node.IsKind(SyntaxKind.IdentifierName))
+                                node.IsKind(SyntaxKind.IdentifierName) ||
+                                node.IsKind(SyntaxKind.SimpleAssignmentExpression) ||
+                                node.IsKind(SyntaxKind.GenericName))
                                 ExpressionTree(node, ref curData);
-                            else if (node.IsKind(SyntaxKind.SimpleAssignmentExpression))
-                            {
-                                curData.expressionText += newL;
-                                ExpressionTree(node, ref curData);
-                            }
-                            else if (node.IsKind(SyntaxKind.GenericName))
-                            {
-                                string typeText = ((GenericNameSyntax)node).Text();
-                                curData.expressionText += typeMap.Map(typeText);
-                                imports.AddType(typeText.JavaSubTypes());
-                            }
+                            
                             else if (node.IsKind(SyntaxKind.PredefinedType))
                             {
                                 string typeText = ((PredefinedTypeSyntax)node).Text();
