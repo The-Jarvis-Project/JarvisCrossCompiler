@@ -705,11 +705,6 @@ namespace JCC.Java
                     curData.expressionText += "]";
                 }
             }
-            else if (current.IsKind(SyntaxKind.ThisExpression))
-            {
-                ThisExpressionSyntax syn = (ThisExpressionSyntax)current;
-                curData.expressionText += syn.Token.Text;
-            }
             else if (current.IsKind(SyntaxKind.SingleVariableDesignation))
             {
                 SingleVariableDesignationSyntax syn = (SingleVariableDesignationSyntax)current;
@@ -726,8 +721,12 @@ namespace JCC.Java
                     discards++;
                 }
             }
+            else if (current.IsKind(SyntaxKind.ThisExpression))
+                curData.expressionText += "this";
             else if (current.IsKind(SyntaxKind.DefaultLiteralExpression))
                 curData.expressionText += "null";
+            else if (current.IsKind(SyntaxKind.BaseExpression))
+                curData.expressionText += "super";
             else if (current.IsKind(SyntaxKind.GenericName))
             {
                 string typeText = ((GenericNameSyntax)current).Text();
@@ -754,9 +753,9 @@ namespace JCC.Java
                                 node.IsKind(SyntaxKind.ArrayType) ||
                                 node.IsKind(SyntaxKind.IdentifierName) ||
                                 node.IsKind(SyntaxKind.SimpleAssignmentExpression) ||
-                                node.IsKind(SyntaxKind.GenericName))
+                                node.IsKind(SyntaxKind.GenericName) ||
+                                node.IsKind(SyntaxKind.BaseExpression))
                                 ExpressionTree(node, ref curData);
-                            
                             else if (node.IsKind(SyntaxKind.PredefinedType))
                             {
                                 string typeText = ((PredefinedTypeSyntax)node).Text();
