@@ -9,7 +9,8 @@ string[] filePaths = new[] {
     //@"D:\Visual Studio\Projects\JarvisLinker\JarvisLinker\Controllers\JarvisRequestsController.cs",
     //@"D:\Visual Studio\Projects\JarvisCrossCompiler\JarvisCrossCompiler\JCompile.cs",
     //@"D:\Unity\Projects\Purgatory\Assets\Scripts\Generation\ChunkGenerator.cs",
-    @"D:\Visual Studio\Projects\Jarvis\Jarvis\JarvisService.cs",
+    //@"D:\Visual Studio\Projects\Jarvis\Jarvis\JarvisService.cs",
+    @"D:\Visual Studio\Projects\Jarvis\Jarvis\JarvisService.Designer.cs",
 };
 
 for (int i = 0; i < filePaths.Length; i++)

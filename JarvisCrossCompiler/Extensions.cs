@@ -23,6 +23,11 @@ namespace JCC
                 GenericNameSyntax syntax = (GenericNameSyntax)node;
                 return node.GetFirstToken().Text + syntax.TypeArgumentList.ToFullString();
             }
+            else if (node.IsKind(SyntaxKind.QualifiedName))
+            {
+                QualifiedNameSyntax syntax = (QualifiedNameSyntax)node;
+                return syntax.Left.Text() + "." + syntax.Right.Text();
+            }
             else return node.GetFirstToken().Text;
         }
 
