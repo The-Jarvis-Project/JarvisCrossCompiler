@@ -39,7 +39,8 @@ namespace JCC.Java
                 ("JarvisRequest", "Jarvis.API"),
                 ("JarvisResponse", "Jarvis.API"),
                 ("PrintWriter", "java.io.PrintWriter"),
-                ("FileWriter", "java.io.FileWriter"));
+                ("FileWriter", "java.io.FileWriter"),
+                ("Timer", "java.util.Timer"));
         }
 
         public override void Run()
@@ -244,6 +245,7 @@ namespace JCC.Java
                         OutputText += "\t\treturn " + mData.expressionData?.expressionText + ";" + newL;
                         OutputText += "\t}";
                     }
+                    else OutputText += " { }";
                     OutputText += newL;
                 }
 
