@@ -46,6 +46,7 @@ namespace JCC.Java
         public List<string> mods;
         public List<(string, string)> parameters;
         public JavaBlockData? blockData;
+        public JavaExpressionData? expressionData;
     }
 
     public struct JavaBlockData

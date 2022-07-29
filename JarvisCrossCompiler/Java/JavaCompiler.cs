@@ -238,6 +238,12 @@ namespace JCC.Java
 
                     OutputText += ")";
                     if (mData.blockData != null) OutputText += mData.blockData?.blockText;
+                    else if (mData.expressionData != null)
+                    {
+                        OutputText += " {" + newL;
+                        OutputText += "\t\treturn " + mData.expressionData?.expressionText + ";" + newL;
+                        OutputText += "\t}";
+                    }
                     OutputText += newL;
                 }
 
@@ -427,6 +433,9 @@ namespace JCC.Java
                     methodData.parameters.Add((typeMap.Map(param.Type.Text()), param.Identifier.Text));
             if (methodSyn.FindChild(SyntaxKind.Block) is BlockSyntax blockSyn)
                 methodData.blockData = ProcessBlock(blockSyn, 1);
+            else if (methodSyn.FindChild(SyntaxKind.ArrowExpressionClause)
+                is ArrowExpressionClauseSyntax arrowSyn)
+                methodData.expressionData = ProcessExpression(arrowSyn.Expression, 0);
             classes[Get_CDI(className)].methods.Add(methodData);
         }
 
