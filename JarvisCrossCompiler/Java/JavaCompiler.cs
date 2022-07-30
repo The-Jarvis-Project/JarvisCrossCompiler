@@ -263,8 +263,7 @@ namespace JCC.Java
             };
             foreach (SyntaxToken token in enumSyn.Modifiers)
             {
-                if (token.Internal()) enumData.mods.Add("default");
-                else if (token.Private()) enumData.mods.Add("private");
+                if (token.Private()) enumData.mods.Add("private");
                 else if (token.Public()) enumData.mods.Add("public");
             }
             foreach (EnumMemberDeclarationSyntax member in enumSyn.Members)
@@ -289,8 +288,7 @@ namespace JCC.Java
             };
             foreach (SyntaxToken token in classSyn.Modifiers)
             {
-                if (token.Internal()) classData.mods.Add("default");
-                else if (token.Private()) classData.mods.Add("private");
+                if (token.Private()) classData.mods.Add("private");
                 else if (token.Public()) classData.mods.Add("public");
                 else if (token.Static()) classData.csMarkedStatic = true;
             }
