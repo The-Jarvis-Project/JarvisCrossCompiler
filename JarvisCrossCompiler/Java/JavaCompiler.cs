@@ -1056,7 +1056,7 @@ namespace JCC.Java
                         }
                         else if (token.IsKind(SyntaxKind.CommaToken) &&
                             token.Parent.IsKind(SyntaxKind.VariableDeclaration))
-                            curData.blockText += ", ";
+                            curData.blockText += ",";
                         else if (token.IsKind(SyntaxKind.SemicolonToken))
                         {
                             if (!token.Parent.IsKind(SyntaxKind.ForStatement))
