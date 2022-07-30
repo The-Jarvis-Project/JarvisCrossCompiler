@@ -486,57 +486,85 @@ namespace JCC.Java
             else if (current.IsKind(SyntaxKind.SimpleMemberAccessExpression))
             {
                 MemberAccessExpressionSyntax syn = (MemberAccessExpressionSyntax)current;
-                ExpressionTree(syn.Expression, ref curData);
-                SymbolInfo? info = sModel.GetSymbolInfo(syn.Name);
-                bool typeExists = info.GetKind(out SymbolKind kind);
-                string? containingType = info?.Symbol?.ContainingType.Name;
-
-                if (syn.Name.Identifier.Text == "Empty" &&
-                    ((typeExists && kind == SymbolKind.Field && containingType == "String") || !typeExists))
+                if (IsAccessing(syn, "Empty", SymbolKind.Field, "String"))
                     curData.expressionText += "new String()";
-                else if (syn.Name.Identifier.Text == "ToString" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                else if (IsAccessing(syn, "IsUpper", SymbolKind.Method, "Char"))
+                    curData.expressionText += "Character.isUpperCase";
+                else if (IsAccessing(syn, "ToString", SymbolKind.Method))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".toString";
-                else if (syn.Name.Identifier.Text == "Replace" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                }
+                else if (IsAccessing(syn, "Replace", SymbolKind.Method, "String"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".replace";
-                else if (syn.Name.Identifier.Text == "Split" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                }
+                else if (IsAccessing(syn, "Split", SymbolKind.Method, "String"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".split";
-                else if (syn.Name.Identifier.Text == "ToLower" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                }
+                else if (IsAccessing(syn, "ToLower", SymbolKind.Method, "String"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".toLowerCase";
-                else if (syn.Name.Identifier.Text == "Trim" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                }
+                else if (IsAccessing(syn, "Trim", SymbolKind.Method, "String"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".trim";
-                else if (syn.Name.Identifier.Text == "StartsWith" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                }
+                else if (IsAccessing(syn, "StartsWith", SymbolKind.Method, "String"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".startsWith";
-                else if (syn.Name.Identifier.Text == "EndsWith" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                }
+                else if (IsAccessing(syn, "EndsWith", SymbolKind.Method, "String"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".endsWith";
-                else if (syn.Name.Identifier.Text == "Length" &&
-                    ((typeExists && kind == SymbolKind.Property && containingType == "Array") || !typeExists))
+                }
+                else if (IsAccessing(syn, "Length", SymbolKind.Property, "Array"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".length";
-                else if (syn.Name.Identifier.Text == "ToArray" &&
-                    ((typeExists && kind == SymbolKind.Method && containingType == "List") || !typeExists))
+                }
+                else if (IsAccessing(syn, "ToArray", SymbolKind.Method, "List"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".toArray";
-                else if (syn.Name.Identifier.Text == "Clear" &&
-                    ((typeExists && kind == SymbolKind.Method && containingType == "List") || !typeExists))
+                }
+                else if (IsAccessing(syn, "Clear", SymbolKind.Method, "List"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".clear";
-                else if (syn.Name.Identifier.Text == "Contains" &&
-                    ((typeExists && kind == SymbolKind.Method && containingType == "List") || !typeExists))
+                }
+                else if (IsAccessing(syn, "Contains", SymbolKind.Method, "List"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".contains";
-                else if (syn.Name.Identifier.Text == "Count" &&
-                    ((typeExists && kind == SymbolKind.Property && containingType == "List") || !typeExists))
+                }
+                else if (IsAccessing(syn, "Count", SymbolKind.Property, "List"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".size()";
-                else if (syn.Name.Identifier.Text == "Length" &&
-                    ((typeExists && kind == SymbolKind.Property) || !typeExists))
+                }
+                else if (IsAccessing(syn, "Length", SymbolKind.Property))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".length()";
-                else if (syn.Name.Identifier.Text == "Add" &&
-                    ((typeExists && kind == SymbolKind.Method) || !typeExists))
+                }
+                else if (IsAccessing(syn, "Add", SymbolKind.Method, "List"))
+                {
+                    ExpressionTree(syn.Expression, ref curData);
                     curData.expressionText += ".add";
-                else curData.expressionText += "." + syn.Name.Identifier.Text;
+                }
+                else
+                {
+                    ExpressionTree(syn.Expression, ref curData);
+                    curData.expressionText += "." + syn.Name.Identifier.Text;
+                }
             }
             else if (current.IsKind(SyntaxKind.InvocationExpression))
             {
@@ -733,6 +761,12 @@ namespace JCC.Java
                 curData.expressionText += typeMap.Map(typeText);
                 imports.AddType(typeText.JavaSubTypes());
             }
+            else if (current.IsKind(SyntaxKind.PredefinedType))
+            {
+                string typeText = ((PredefinedTypeSyntax)current).Text();
+                curData.expressionText += typeMap.Map(typeText);
+                imports.AddType(typeText);
+            }
             else
             {
                 ChildSyntaxList list = current.ChildNodesAndTokens();
@@ -754,14 +788,9 @@ namespace JCC.Java
                                 node.IsKind(SyntaxKind.IdentifierName) ||
                                 node.IsKind(SyntaxKind.SimpleAssignmentExpression) ||
                                 node.IsKind(SyntaxKind.GenericName) ||
-                                node.IsKind(SyntaxKind.BaseExpression))
+                                node.IsKind(SyntaxKind.BaseExpression) ||
+                                node.IsKind(SyntaxKind.PredefinedType))
                                 ExpressionTree(node, ref curData);
-                            else if (node.IsKind(SyntaxKind.PredefinedType))
-                            {
-                                string typeText = ((PredefinedTypeSyntax)node).Text();
-                                curData.expressionText += typeMap.Map(typeText);
-                                imports.AddType(typeText);
-                            }
                         }
                     }
                     else if (list[i].IsToken)

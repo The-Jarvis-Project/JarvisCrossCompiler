@@ -78,6 +78,42 @@ namespace JCC
         }
 
         /// <summary>
+        /// Checks if a member access expression is a specific expression.
+        /// </summary>
+        /// <param name="syn">The access expression</param>
+        /// <param name="member">The member that is accessed</param>
+        /// <param name="memberType">The type of the member that is accessed</param>
+        /// <returns>If the access expression matches the inputs given</returns>
+        public bool IsAccessing(MemberAccessExpressionSyntax syn,
+            string member, SymbolKind memberType)
+        {
+            SymbolInfo? info = sModel.GetSymbolInfo(syn.Name);
+            bool typeExists = info.GetKind(out SymbolKind kind);
+
+            return syn.Name.Identifier.Text == member && 
+                ((typeExists && kind == memberType) || !typeExists);
+        }
+
+        /// <summary>
+        /// Checks if a member access expression is a specific expression.
+        /// </summary>
+        /// <param name="syn">The access expression</param>
+        /// <param name="member">The member that is accessed</param>
+        /// <param name="memberType">The type of the member that is accessed</param>
+        /// <param name="type">The object type of member access expression</param>
+        /// <returns>If the access expression matches the inputs given</returns>
+        public bool IsAccessing(MemberAccessExpressionSyntax syn, 
+            string member, SymbolKind memberType, string type)
+        {
+            SymbolInfo? info = sModel.GetSymbolInfo(syn.Name);
+            bool typeExists = info.GetKind(out SymbolKind kind);
+            string? containingType = info?.Symbol?.ContainingType.Name;
+
+            return syn.Name.Identifier.Text == member &&
+                ((typeExists && kind == memberType && containingType == type) || !typeExists);
+        }
+
+        /// <summary>
         /// Runs the compiler.
         /// </summary>
         public virtual void Run()
