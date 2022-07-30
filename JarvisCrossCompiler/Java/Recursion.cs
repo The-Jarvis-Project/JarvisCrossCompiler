@@ -5,14 +5,6 @@ namespace JCC.Java
 {
     internal static class Recursion
     {
-
-        public static string Tabs(int tabs)
-        {
-            string returnVal = string.Empty;
-            for (int i = 0; i < tabs; i++) returnVal += "\t";
-            return returnVal;
-        }
-
         public static string ProcessExpressionToken(SyntaxToken token)
         {
             string java = string.Empty;
@@ -56,6 +48,5 @@ namespace JCC.Java
             }
             return java;
         }
-
     }
 }

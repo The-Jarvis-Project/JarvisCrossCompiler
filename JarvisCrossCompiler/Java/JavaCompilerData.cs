@@ -54,7 +54,7 @@ namespace JCC.Java
         public string blockText;
         public BlockSyntax root;
 
-        public string TabString => Recursion.Tabs(curTabs);
+        public string TabString => curTabs.AsTabString();
         public int curTabs;
     }
 
@@ -63,7 +63,7 @@ namespace JCC.Java
         public string expressionText;
         public ExpressionSyntax root;
 
-        public string TabString => Recursion.Tabs(curTabs);
+        public string TabString => curTabs.AsTabString();
         public int curTabs;
     }
 }

@@ -120,4 +120,14 @@ namespace JCC
             return false;
         }
     }
+
+    internal static class IntExtensions
+    {
+        public static string AsTabString(this int tabs)
+        {
+            string returnVal = string.Empty;
+            for (int i = 0; i < tabs; i++) returnVal += "\t";
+            return returnVal;
+        }
+    }
 }
