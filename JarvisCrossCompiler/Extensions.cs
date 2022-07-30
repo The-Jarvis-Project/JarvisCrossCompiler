@@ -7,14 +7,6 @@ namespace JCC
 {
     internal static class NodeExtensions
     {
-        public static NodeData ProcessNode(this SyntaxNode node) =>
-            new NodeData
-        {
-            kind = node.Kind(),
-            children = node.ChildNodes().ToArray(),
-            tokens = node.ChildTokens().ToArray()
-        };
-
         public static string Text(this BaseTypeSyntax node) => node.GetFirstToken().Text;
         public static string Text(this TypeSyntax node)
         {
