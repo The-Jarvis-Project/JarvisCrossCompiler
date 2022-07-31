@@ -1008,6 +1008,7 @@ namespace JCC.Java
                                 string typeText = ((GenericNameSyntax)node).Text();
                                 curData.blockText += typeMap.Map(typeText);
                                 imports.AddType(typeText.JavaSubTypes());
+
                             }
                             else if (node.IsKind(SyntaxKind.LocalDeclarationStatement))
                             {
